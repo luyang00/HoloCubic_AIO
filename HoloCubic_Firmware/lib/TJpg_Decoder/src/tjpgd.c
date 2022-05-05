@@ -1090,15 +1090,15 @@ static const uint8_t Clip8[1024] = {
 
 #else /* JD_TBLCLIP */
 
-inline uint8_t BYTECLIP (
-  int16_t val
-)
-{
-  if (val < 0) val = 0;
-  else if (val > 255) val = 255; // else added by Bodmer to speed things up
+// inline uint8_t BYTECLIP (
+//   int16_t val
+// )
+// {
+//   if (val < 0) val = 0;
+//   else if (val > 255) val = 255; // else added by Bodmer to speed things up
 
-  return (uint8_t)val;
-}
+//   return (uint8_t)val;
+// }
 
 #endif
 
@@ -1329,7 +1329,12 @@ static int16_t huffext (  /* >=0: decoded data, <0: error code */
 }
 
 
-
+static uint8_t BYTECLIP (int val)
+{
+	if (val < 0) return 0;
+	else if (val > 255) return 255;
+	return (uint8_t)val;
+}
 
 /*-----------------------------------------------------------------------*/
 /* Apply Inverse-DCT in Arai Algorithm (see also aa_idct.png)            */

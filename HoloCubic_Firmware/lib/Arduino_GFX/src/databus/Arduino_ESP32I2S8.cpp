@@ -6,6 +6,21 @@
 
 #include "Arduino_DataBus.h"
 #include "Arduino_ESP32I2S8.h"
+#define DR_REG_DPORT_BASE 0x3FF00000
+#define DPORT_I2S0_CLK_EN   (BIT(4))
+#define DPORT_I2S0_RST   (BIT(4))
+#define DPORT_I2S1_CLK_EN   (BIT(21))
+#define DPORT_I2S1_RST   (BIT(21))
+#define DPORT_PERIP_CLK_EN_REG          (DR_REG_DPORT_BASE + 0x0C0)
+#define DPORT_PERIP_RST_EN_REG          (DR_REG_DPORT_BASE + 0x0C4)
+#define _DPORT_READ_PERI_REG(addr) (*((volatile uint32_t *)(addr)))
+#define _DPORT_WRITE_PERI_REG(addr, val) (*((volatile uint32_t *)(addr))) = (uint32_t)(val)
+#define _DPORT_REG_SET_BIT(_r, _b)  _DPORT_REG_WRITE((_r), (_DPORT_REG_READ(_r)|(_b)))
+#define _DPORT_REG_CLR_BIT(_r, _b)  _DPORT_REG_WRITE((_r), (_DPORT_REG_READ(_r) & (~(_b))))
+#define DPORT_READ_PERI_REG(addr)       _DPORT_READ_PERI_REG(addr)
+#define DPORT_WRITE_PERI_REG(addr, val) _DPORT_WRITE_PERI_REG((addr), (val))
+#define DPORT_SET_PERI_REG_MASK(reg, mask)   DPORT_WRITE_PERI_REG((reg), (DPORT_READ_PERI_REG(reg)|(mask)))
+#define DPORT_CLEAR_PERI_REG_MASK(reg, mask) DPORT_WRITE_PERI_REG((reg), (DPORT_READ_PERI_REG(reg)&(~(mask))))
 
 // #define SET_DATA_AND_WR_AT_THE_SAME_TIME
 
